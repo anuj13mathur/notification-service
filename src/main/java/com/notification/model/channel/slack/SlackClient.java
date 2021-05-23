@@ -5,9 +5,9 @@ import com.notification.model.channel.inapp.InAppTemplate;
 import java.util.List;
 
 public class SlackClient {
-    public void send(SlackTemplate template, List<String> userIds) {
+    public void send(SlackMessage message, List<String> userIds) {
     }
 
-    public void broadcast(SlackTemplate template, String channel) {
+    public void broadcast(SlackMessage message, String channel) {
     }
 }

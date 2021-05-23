@@ -8,4 +8,12 @@ public class SlackTemplate {
         this.id = id;
         this.text = text;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getText() {
+        return text;
+    }
 }

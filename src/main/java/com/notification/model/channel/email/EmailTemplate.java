@@ -10,4 +10,16 @@ public class EmailTemplate {
         this.subject = subject;
         this.body = body;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public String getBody() {
+        return body;
+    }
 }

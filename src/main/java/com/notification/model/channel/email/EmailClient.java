@@ -5,9 +5,9 @@ import com.notification.model.channel.inapp.InAppTemplate;
 import java.util.List;
 
 public class EmailClient {
-    public void send(EmailTemplate template, List<String> userIds) {
+    public void send(Email email, List<String> userIds) {
     }
 
-    public void broadcast(EmailTemplate template, String groupEmailId) {
+    public void broadcast(Email email, String groupEmailId) {
     }
 }

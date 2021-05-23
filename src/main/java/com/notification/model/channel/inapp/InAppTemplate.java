@@ -12,4 +12,20 @@ public class InAppTemplate {
         this.body = body;
         this.footer = footer;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getHeader() {
+        return header;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public String getFooter() {
+        return footer;
+    }
 }
