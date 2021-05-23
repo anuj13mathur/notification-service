@@ -10,4 +10,8 @@ Each client has two methods:
 
 Right now, the templating is pretty straight forward. A templating engine like
 Thymeleaf, Apache FreeMarker or even groovy templates can be used. The choice of templating engine
-would also depend on the implementation language like in this case Java. 
+would also depend on the implementation language like in this case Java.
+
+### Swagger documentation 
+Swagger API documentation is added in file swagger.yaml, present at the root directory of this project. 
+This file can be imported in https://editor.swagger.io/ to view the documentation.
