@@ -7,4 +7,7 @@ import java.util.List;
 public class SlackClient {
     public void send(SlackTemplate template, List<String> userIds) {
     }
+
+    public void broadcast(SlackTemplate template, String channel) {
+    }
 }
