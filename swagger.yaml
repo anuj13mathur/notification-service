@@ -1,0 +1,515 @@
+swagger: "2.0"
+info:
+  description: "This is a sample notification service."
+  version: "1.0.0"
+  title: "Notification service"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+tags:
+- name: "notification"
+  description: "Sending notifications"
+- name: "template"
+  description: "Operation for notification templates"
+- name: "email"
+  description: "Operation for email templates"
+- name: "slack"
+  description: "Operation for slack templates"
+- name: "inapp"
+  description: "Operation for inapp templates"
+schemes:
+- "https"
+paths:
+  /notifications:
+    post:
+      tags:
+      - "notification"
+      summary: "Trigger a new notification to be sent to user/s"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Payload for notification to be sent"
+        required: true
+        schema:
+          type: "object"
+          required:
+            - id
+            - users
+          properties:
+            id:
+              type: string
+            data:
+              type: object
+            channels:
+              type: array
+              items: 
+                type: string
+              example: ["email","slack","inapp"]
+              default: ["inapp"]
+            type:
+              type: string
+              example: "alert"
+              default: "normal"
+            users:
+              type: array
+              items: 
+                type: string
+      responses:
+        "204":
+          description: "Notification successfully triggered"
+        "400":
+          description: "Invalid data in request body"
+  /notification/templates:
+    post:
+      tags:
+      - "template"
+      summary: "Create a new notification template"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Details of notification template"
+        required: true
+        schema:
+          $ref: "#/definitions/TemplateMetadata"
+      responses:
+        "201":
+          description: "Notification template created"
+          schema:
+            type: "object"
+            properties:
+              id:
+                type: "string"
+        "400":
+          description: "Invalid data in request body"
+  /notification/templates/{id}:
+    put:
+      tags:
+      - "template"
+      summary: "Update a new notification template"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Template that needs to be updated"
+        required: true
+        type: "string"
+      - name: "body" 
+        in: "body"
+        description: "Details of notification template"
+        required: true
+        schema:
+          $ref: "#/definitions/TemplateMetadata"
+      responses:
+        "204":
+          description: "Notification template updated"
+        "400":
+          description: "Invalid data in request body"
+        "404":
+          description: "Template with provided id does not exist"
+    delete:
+      tags:
+      - "template"
+      summary: "Deletes notification template for all channels"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Template that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        "204":
+          description: "Notification template deleted"
+        "404":
+          description: "Template with provided id does not exist"
+    get:
+      tags:
+      - "template"
+      summary: "Get notification template for all channels"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Template that needs to be fetched"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Notification template fetched"
+          schema:
+            $ref: "#/definitions/AllChannelTemplate"
+        "404":
+          description: "Template with provided id does not exist"
+  /notification/templates/{id}/email:
+    post:
+      tags:
+      - "template"
+      - "email"
+      summary: "Create a new email notification template"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the base template"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Payload for email template"
+        required: true
+        schema:
+          $ref: "#/definitions/EmailTemplate"
+      responses:
+        "201":
+          description: "Email template created"
+          schema:
+            type: "object"
+            properties:
+              id:
+                type: "string"
+        "400":
+          description: "Invalid data in request body"
+        "404":
+          description: "Base template with provided id does not exist"
+  /notification/templates/email/{id}:
+    put:
+      tags:
+      - "template"
+      - "email"
+      summary: "Update the email template"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the email template"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Payload for email template"
+        required: true
+        schema:
+          $ref: "#/definitions/EmailTemplate"
+      responses:
+        "204":
+          description: "Email template updated"
+        "400":
+          description: "Invalid data in request body"
+        "404":
+          description: "Template with provided id does not exist"
+    get:
+      tags:
+      - "template"
+      - "email"
+      summary: "Get email template"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the email template"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Email template fetched"
+          schema:
+            $ref: "#/definitions/EmailTemplate"
+        "404":
+          description: "Template with provided id does not exist"
+    delete:
+      tags:
+      - "template"
+      - "email"
+      summary: "Delete email template"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the email template"
+        required: true
+        type: "string"
+      responses:
+        "204":
+          description: "Email template deleted"
+        "404":
+          description: "Template with provided id does not exist"
+  /notification/templates/{id}/slack:
+    post:
+      tags:
+      - "template"
+      - "slack"
+      summary: "Create a new slack notification template"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the base template"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Payload for slack template"
+        required: true
+        schema:
+          $ref: "#/definitions/SlackTemplate"
+      responses:
+        "201":
+          description: "Slack template created"
+          schema:
+            type: "object"
+            properties:
+              id:
+                type: "string"
+        "400":
+          description: "Invalid data in request body"
+        "404":
+          description: "Base template with provided id does not exist"
+  /notification/templates/slack/{id}:
+    put:
+      tags:
+      - "template"
+      - "slack"
+      summary: "Update the slack template"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the slack template"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Payload for slack template"
+        required: true
+        schema:
+          $ref: "#/definitions/SlackTemplate"
+      responses:
+        "204":
+          description: "Slack template updated"
+        "400":
+          description: "Invalid data in request body"
+        "404":
+          description: "Template with provided id does not exist"
+    get:
+      tags:
+      - "template"
+      - "slack"
+      summary: "Get slack template"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the slack template"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Slack template fetched"
+          schema:
+            $ref: "#/definitions/SlackTemplate"
+        "404":
+          description: "Template with provided id does not exist"
+    delete:
+      tags:
+      - "template"
+      - "slack"
+      summary: "Delete slack template"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the slack template"
+        required: true
+        type: "string"
+      responses:
+        "204":
+          description: "Slack template deleted"
+        "404":
+          description: "Template with provided id does not exist"
+  /notification/templates/{id}/inapp:
+    post:
+      tags:
+      - "template"
+      - "inapp"
+      summary: "Create a new inapp notification template"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the base template"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Payload for inapp template"
+        required: true
+        schema:
+          $ref: "#/definitions/InAppTemplate"
+      responses:
+        "201":
+          description: "InApp template created"
+          schema:
+            type: "object"
+            properties:
+              id:
+                type: "string"
+        "400":
+          description: "Invalid data in request body"
+        "404":
+          description: "Base template with provided id does not exist"
+  /notification/templates/inapp/{id}:
+    put:
+      tags:
+      - "template"
+      - "inapp"
+      summary: "Update the inapp template"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the inapp template"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Payload for inapp template"
+        required: true
+        schema:
+          $ref: "#/definitions/InAppTemplate"
+      responses:
+        "204":
+          description: "InApp template updated"
+        "400":
+          description: "Invalid data in request body"
+        "404":
+          description: "Template with provided id does not exist"
+    get:
+      tags:
+      - "template"
+      - "inapp"
+      summary: "Get inapp template"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the inapp template"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "InApp template fetched"
+          schema:
+            $ref: "#/definitions/InAppTemplate"
+        "404":
+          description: "Template with provided id does not exist"
+    delete:
+      tags:
+      - "template"
+      - "inapp"
+      summary: "Delete inapp template"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Id of the inapp template"
+        required: true
+        type: "string"
+      responses:
+        "204":
+          description: "InApp template deleted"
+        "404":
+          description: "Template with provided id does not exist"
+definitions:
+  TemplateMetadata:
+    type: "object"
+    properties:
+      title:
+        type: "string"
+      description:
+        type: "string"
+  EmailTemplate:
+    type: "object"
+    properties:
+      subject:
+        type: "string"
+      body:
+        type: "string"
+  SlackTemplate:
+    type: "object"
+    properties:
+      text:
+        type: "string"
+  InAppTemplate:
+    type: "object"
+    properties:
+      header:
+        type: "string"
+      body:
+        type: "string"
+      footer:
+        type: "string"
+  AllChannelTemplate:
+    type: "object"
+    properties:
+      metadata:
+        $ref: "#/definitions/TemplateMetadata"
+      emailTemplate:
+        $ref: "#/definitions/EmailTemplate"
+      slackTemplate:
+        $ref: "#/definitions/SlackTemplate"
+      inAppTemplate:
+        $ref: "#/definitions/InAppTemplate"
+      
