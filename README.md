@@ -14,4 +14,4 @@ would also depend on the implementation language like in this case Java.
 
 ### Swagger documentation 
 Swagger API documentation is added in file swagger.yaml, present at the root directory of this project. 
-This file can be imported in https://editor.swagger.io/ to view the documentation.
+This file can be imported at https://editor.swagger.io/ to look at the documentation.
